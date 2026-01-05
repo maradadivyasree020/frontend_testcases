@@ -44,3 +44,116 @@
   border-radius: 6px;
   white-space: pre-wrap;
 }
+
+.tc-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.tc-actions button {
+  margin-left: 10px;
+  padding: 6px 12px;
+}
+
+.tc-actions .green {
+  background: #4caf50;
+  color: white;
+}
+
+.last-run {
+  font-size: 13px;
+  color: gray;
+}
+
+.tc-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tc-table th,
+.tc-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.tc-table tr:hover {
+  background: #f5f5f5;
+  cursor: pointer;
+}
+
+/* ===== DIFF GRID ===== */
+.diff-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* EXACT 50% / 50% */
+  gap: 16px;
+  margin-top: 12px;
+  width: 100%;
+}
+
+/* ===== DIFF COLUMN ===== */
+.diff-col {
+  border: 1px solid #d0d0d0;
+  border-radius: 6px;
+  background: #fafafa;
+  padding: 8px;
+
+  height: 360px;                 /* 🔥 SAME HEIGHT */
+  display: flex;
+  flex-direction: column;
+
+  min-width: 0;                  /* 🔥 IMPORTANT for grid overflow */
+}
+
+/* ===== COLUMN HEADER ===== */
+.diff-col h4 {
+  text-align: center;
+  margin: 6px 0;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+/* ===== CONTENT BOX ===== */
+.diff-box {
+  flex: 1;                       /* 🔥 FILL REMAINING HEIGHT */
+  width: 100%;                   /* 🔥 FULL WIDTH */
+  overflow: auto;                /* 🔥 INTERNAL SCROLL */
+  background: #ffffff;
+  padding: 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  border: 1px solid #e0e0e0;
+  box-sizing: border-box;
+}
+
+/* ===== NO CHANGE STATE ===== */
+.no-change {
+  flex: 1;                       /* 🔥 TAKE FULL COLUMN */
+  width: 100%;                   /* 🔥 FULL WIDTH */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-weight: 600;
+  color: #2e7d32;
+  background: #e8f5e9;
+  border: 1px dashed #2e7d32;
+  text-align: center;
+}
+
+.line-changed {
+  background-color: #fff3cd;
+  border-left: 4px solid #ff9800;
+  padding-left: 6px;
+}
+
+.tc-table.disabled {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.tc-table.disabled {
+  pointer-events: none;
+  opacity: 0.5;
+}
