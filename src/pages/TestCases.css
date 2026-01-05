@@ -127,10 +127,9 @@
   box-sizing: border-box;
 }
 
-/* ===== NO CHANGE STATE ===== */
 .no-change {
-  flex: 1;                       /* 🔥 TAKE FULL COLUMN */
-  width: 100%;                   /* 🔥 FULL WIDTH */
+  flex: 1;                       
+  width: 100%;                   
   display: flex;
   align-items: center;
   justify-content: center;
@@ -156,4 +155,26 @@
 .tc-table.disabled {
   pointer-events: none;
   opacity: 0.5;
+}
+
+.table-lock {
+  position: relative;
+}
+
+/* Fully disable table ONLY during Run TC */
+.table-lock.locked {
+  pointer-events: none;
+}
+
+/* Optional visual feedback */
+.table-lock.locked::after {
+  content: "Running test cases...";
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  color: #333;
 }

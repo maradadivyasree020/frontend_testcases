@@ -24,6 +24,8 @@ export default function TestCases() {
 
   const runTC = async () => {
     try {
+      setHasRun(false);   
+      setRunLogs("");
       setLoading(true);
       const logs = await api.runTC();
       const time = new Date().toLocaleString();
@@ -97,10 +99,16 @@ export default function TestCases() {
 
       {loading && <p>Loading...</p>}
       {error && <p className="error">{error}</p>}
-      {runLogs && <pre className="logs-box">{runLogs}</pre>}
+      {hasRun && !loading && <p>{runLogs}</p>}
+      {/* {loading && runLogs && (
+  <pre className="logs-box">{runLogs}</pre>
+)} */}
+
+      {/* {runLogs && <pre className="logs-box">{runLogs}</pre>} */}
 
       {/* ================= ALL ================= */}
       {mode === "ALL" &&(
+          <div className={`table-lock ${loading ? "locked" : ""}`}>
         <table className="tc-table">
           <thead>
             <tr>
@@ -131,10 +139,12 @@ export default function TestCases() {
             ))}
           </tbody>
         </table>
+        </div>
       )}
 
       {/* ================= DIFF ================= */}
       {mode === "DIFF" &&(
+          <div className={`table-lock ${loading ? "locked" : ""}`}>
         <table className="tc-table">
           <thead>
             <tr>
@@ -229,6 +239,7 @@ export default function TestCases() {
             })}
           </tbody>
         </table>
+        </div>
       )}
     </div>
   );

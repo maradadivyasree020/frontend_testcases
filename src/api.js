@@ -49,6 +49,6 @@ export const api = {
       method: "POST",
     });
     if (!res.ok) throw new Error("Failed to run test cases");
-    return res.text(); // 🔥 logs
+    return res.text(); 
   },
 };
