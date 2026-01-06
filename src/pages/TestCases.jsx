@@ -100,11 +100,6 @@ export default function TestCases() {
       {loading && <p>Loading...</p>}
       {error && <p className="error">{error}</p>}
       {hasRun && !loading && <p>{runLogs}</p>}
-      {/* {loading && runLogs && (
-  <pre className="logs-box">{runLogs}</pre>
-)} */}
-
-      {/* {runLogs && <pre className="logs-box">{runLogs}</pre>} */}
 
       {/* ================= ALL ================= */}
       {mode === "ALL" &&(
@@ -119,22 +114,39 @@ export default function TestCases() {
             </tr>
           </thead>
           <tbody>
-            {data.map((tc, i) => (
+            {Object.entries(
+              data.reduce((acc, tc) => {
+                const key = tc["Controller Name"] || "UNKNOWN CONTROLLER";
+                acc[key] = acc[key] || [];
+                acc[key].push(tc);
+                return acc;
+              }, {})
+            ).map(([controller, tcs]) => (
               <>
-                <tr key={i} onClick={() => toggleExpand(i)}>
-                  <td>{tc["Test Case ID"]}</td>
-                  <td>{tc.Title}</td>
-                  <td>{tc.Priority}</td>
-                  <td>{tc.Type}</td>
+                {/* CONTROLLER HEADER ROW */}
+                <tr className="controller-row">
+                  <td colSpan="4"><strong>{controller}</strong></td>
                 </tr>
 
-                {expanded === i && (
-                  <tr>
-                    <td colSpan="4">
-                      <pre>{JSON.stringify(tc, null, 2)}</pre>
-                    </td>
-                  </tr>
-                )}
+                {/* TEST CASE ROWS */}
+                {tcs.map((tc, i) => (
+                  <>
+                    <tr key={tc["Test Case ID"]} onClick={() => toggleExpand(tc["Test Case ID"])}>
+                      <td>{tc["Test Case ID"]}</td>
+                      <td>{tc.Title}</td>
+                      <td>{tc.Priority}</td>
+                      <td>{tc.Type}</td>
+                    </tr>
+
+                    {expanded === tc["Test Case ID"] && (
+                      <tr>
+                        <td colSpan="4">
+                          <pre>{JSON.stringify(tc, null, 2)}</pre>
+                        </td>
+                      </tr>
+                    )}
+                  </>
+                ))}
               </>
             ))}
           </tbody>
@@ -153,91 +165,89 @@ export default function TestCases() {
               <th>Status</th>
             </tr>
           </thead>
-
           <tbody>
-            {data.map((d, i) => {
-              const oldLines = d.old
-                ? JSON.stringify(d.old, null, 2).split("\n")
-                : [];
-              const newLines = d.new
-                ? JSON.stringify(d.new, null, 2).split("\n")
-                : [];
+            {Object.entries(
+              data.reduce((acc, d) => {
+                const key = d.old?.["Controller Name"] || d.new?.["Controller Name"] || "UNKNOWN CONTROLLER";
+                acc[key] = acc[key] || [];
+                acc[key].push(d);
+                return acc;
+              }, {})
+            ).map(([controller, diffs]) => (
+              <>
+                {/* CONTROLLER HEADER */}
+                <tr className="controller-row">
+                  <td colSpan="3"><strong>{controller}</strong></td>
+                </tr>
 
-              return (
-                <>
-                  <tr key={i} onClick={() => toggleExpand(i)}>
-                    <td>{d.endpoint}</td>
-                    <td>{d.testCaseId}</td>
-                    <td>
-                      {d.old && d.new
-                        ? "Test case updated"
-                        : d.old && !d.new
-                        ? "Only logic changed – test again"
-                        : "New test case"}
-                    </td>
-                  </tr>
+                {diffs.map((d, i) => {
+                  const oldLines = d.old
+                    ? JSON.stringify(d.old, null, 2).split("\n")
+                    : [];
+                  const newLines = d.new
+                    ? JSON.stringify(d.new, null, 2).split("\n")
+                    : [];
 
-                  {expanded === i && (
-                    <tr>
-                      <td colSpan="3">
-                        <div className="diff-grid">
+                  return (
+                    <>
+                      <tr key={`${controller}-${i}`} onClick={() => toggleExpand(`${controller}-${i}`)}>
+                        <td>{d.endpoint}</td>
+                        <td>{d.testCaseId}</td>
+                        <td>
+                          {d.old && d.new
+                            ? "Test case updated"
+                            : d.old && !d.new
+                            ? "Only logic changed – test again"
+                            : "New test case"}
+                        </td>
+                      </tr>
 
-                          {/* OLD */}
-                          <div className="diff-col">
-                            <h4>OLD</h4>
-                            <div className="diff-box">
-                              {oldLines.length ? (
-                                oldLines.map((line, idx) => (
-                                  <div
-                                    key={idx}
-                                    className={
-                                      newLines[idx] !== line
-                                        ? "line-changed"
-                                        : ""
-                                    }
-                                  >
-                                    {line}
+                      {expanded === `${controller}-${i}` && (
+                        <tr>
+                          <td colSpan="3">
+                            <div className="diff-grid">
+                              {/* OLD */}
+                              <div className="diff-col">
+                                <h4>OLD</h4>
+                                <div className="diff-box">
+                                  {oldLines.length ? oldLines.map((line, idx) => (
+                                    <div key={idx} className={newLines[idx] !== line ? "line-changed" : ""}>
+                                      {line}
+                                    </div>
+                                  )) : (
+                                    <div className="no-change">No old test case</div>
+                                  )}
+                                </div>
+                              </div>
+
+                              {/* NEW */}
+                              <div className="diff-col">
+                                <h4>NEW</h4>
+                                {newLines.length ? (
+                                  <div className="diff-box">
+                                    {newLines.map((line, idx) => (
+                                      <div key={idx} className={oldLines[idx] !== line ? "line-changed" : ""}>
+                                        {line}
+                                      </div>
+                                    ))}
                                   </div>
-                                ))
-                              ) : (
-                                <div className="no-change">No old test case</div>
-                              )}
+                                ) : (
+                                  <div className="no-change diff-box">
+                                    Only service logic changed
+                                  </div>
+                                )}
+                              </div>
                             </div>
-                          </div>
-
-                          {/* NEW */}
-                          <div className="diff-col">
-                            <h4>NEW</h4>
-                            {newLines.length ? (
-                              <div className="diff-box">
-                                {newLines.map((line, idx) => (
-                                  <div
-                                    key={idx}
-                                    className={
-                                      oldLines[idx] !== line
-                                        ? "line-changed"
-                                        : ""
-                                    }
-                                  >
-                                    {line}
-                                  </div>
-                                ))}
-                              </div>
-                            ) : (
-                              <div className="no-change diff-box">
-                                 Only service logic changed
-                              </div>
-                            )}
-                          </div>
-
-                        </div>
-                      </td>
-                    </tr>
-                  )}
-                </>
-              );
-            })}
+                          </td>
+                        </tr>
+                      )}
+                    </>
+                  );
+                })}
+              </>
+            ))}
           </tbody>
+
         </table>
         </div>
       )}
