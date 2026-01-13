@@ -23,11 +23,19 @@ export default function Employee() {
 
       <form onSubmit={submit} className="form">
         <input
+          placeholder="Id"
+          onChange={(e) => setForm({ ...form, name: e.target.value })}
+        />
+        <input
           placeholder="Name"
           onChange={(e) => setForm({ ...form, name: e.target.value })}
         />
         <input
           placeholder="Role"
+          onChange={(e) => setForm({ ...form, role: e.target.value })}
+        />
+        <input
+          placeholder="Absent"
           onChange={(e) => setForm({ ...form, role: e.target.value })}
         />
         <button type="submit">Add Employee</button>
@@ -52,11 +60,6 @@ export default function Employee() {
           </tbody>
         ))}
        </table>
-      {/* <ul>
-        {employees.map((emp) => (
-          <li key={emp.id}>{emp.id}-{emp.name} – {emp.role}</li>
-        ))}
-      </ul> */}
     </div>
   );
 }

@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:8080/api";
+const BASE_URL = "http://localhost:8081/api";
 
 export const api = {
   // ================= EMPLOYEE =================
@@ -51,4 +51,18 @@ export const api = {
     if (!res.ok) throw new Error("Failed to run test cases");
     return res.text(); 
   },
+
+  fetchPrompt: async () => {
+    const res = await fetch("http://localhost:8081/api/testcases/prompt");
+    if (!res.ok) throw new Error("Failed to fetch prompt");
+    return res.text();
+  },
+
+  fetchTestResults: async()=> {
+  const res = await fetch("http://localhost:8081/api/testcases/results");
+  if (!res.ok) throw new Error("Failed to fetch results");
+  return res.json();
+}
+
+
 };

@@ -8,12 +8,12 @@ import "./App.css";
 export default function App() {
   return (
     <BrowserRouter>
-      <Navbar />
+      {/* <Navbar /> */}
       <div className="container">
         <Routes>
-          <Route path="/" element={<Employee />} />
-          <Route path="/attendance" element={<Attendance />} />
-          <Route path="/testcases" element={<TestCases />} />
+          {/* <Route path="/" element={<Employee />} /> */}
+          {/* <Route path="/attendance" element={<Attendance />} /> */}
+          <Route path="/" element={<TestCases />} />
         </Routes>
       </div>
     </BrowserRouter>
